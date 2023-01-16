@@ -1,24 +1,26 @@
 import React, { useState } from "react";
 import { FaSearch, FaMapMarkerAlt, FaWind } from "react-icons/fa";
 
-import api from "./services/api"
+import api from "./services/api";
 
 import "./App.css";
 
 function App() {
-  const key = "273be115bfd9eef0f58d2b343dfe2c19"
-  const [city, setCity] = useState("")
-  const [data, setData] = useState({})
+  const key = "273be115bfd9eef0f58d2b343dfe2c19";
+  const [city, setCity] = useState("");
+  const [data, setData] = useState({});
+  const [band, setBand] = useState("");
 
   async function handleSearchCity() {
     try {
-      const response = await api.get(`?q=${city}&units=metric&appid=${key}&lang=pt_br`)
-      setData(response.data)
-      console.log(response.data)
-      setCity("")
+      const response = await api.get(
+        `?q=${city}&units=metric&appid=${key}&lang=pt_br`
+      );
+      setData(response.data);
+      setCity("");
     } catch (error) {
-      alert('Erro')
-      setCity("")
+      alert("Erro");
+      setCity("");
     }
   }
 
@@ -31,7 +33,9 @@ function App() {
             type="text"
             placeholder="Informe a cidade..."
             value={city}
-            onChange={(e) => {setCity(e.target.value)}}
+            onChange={(e) => {
+              setCity(e.target.value);
+            }}
           />
           <button className="buttonSearch" onClick={handleSearchCity}>
             <FaSearch color="#fff" />
@@ -40,27 +44,29 @@ function App() {
 
         {Object.keys(data).length > 0 && (
           <div className="containerInformations">
-          <h2 className="location">
-            <FaMapMarkerAlt size={20} />
-            <span>{data.name}</span>
-            <img src="`https://countryflagsapi.com/png/${data.sys.country}`" alt="" />
-          </h2>
+            <h2 className="location">
+              <FaMapMarkerAlt size={20} />
+              <span>{data.name}</span>
+            </h2>
 
-          <p className="temperature">
-            <span>{data.main.temp}</span>
-            &deg;C
-          </p>
+            <p className="temperature">
+              <span>{data.main.temp} </span>
+              &deg;C
+            </p>
 
-          <p className="description">
-            <span>{data.weather.description}</span>
-            <img src={"`https://openweathermap.org/img/wn/${data.weather.icon}.png`"} alt="" />
-          </p>
+            <p className="description">
+              <span>{data.weather[0].description}</span>
+              <img
+                src={`https://openweathermap.org/img/wn/${data.weather[0].icon}.png`}
+                alt=""
+              />
+            </p>
 
-          <p className="windSpeed">
-            <FaWind />
-            <span>{data.wind.speed}%</span>
-          </p>
-        </div>
+            <p className="windSpeed">
+              <FaWind />
+              <span>{data.wind.speed}</span>
+            </p>
+          </div>
         )}
       </div>
     </div>
